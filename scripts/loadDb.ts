@@ -46,6 +46,11 @@ const createCollection = async (similarityMetric: SimilarityMetric = "dot_produc
 
 const loadSampleData = async () => {
     const collection = await db.collection(ASTRA_DB_COLLECTION)
+
+    // Always restart with new state, deleting old records
+    collection.deleteMany({})
+    console.log("Deleted all documents from collection")
+
     for await (const pdfFile of pdfFiles) {
         const chunks = await getChunkedDocsFromPDF(pdfFile)
         

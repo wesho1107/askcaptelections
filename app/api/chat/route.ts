@@ -72,6 +72,8 @@ export async function POST(req: Request) {
       QUESTION: ${latestMessage}
       ----------------
       `
+    
+      console.log(systemMessage)
 
     // Convert UIMessage format (with parts) to CoreMessage format (with content)
     const convertedMessages = messages.map((msg: any) => ({

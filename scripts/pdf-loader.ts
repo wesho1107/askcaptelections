@@ -16,8 +16,8 @@ export async function getChunkedDocsFromPDF(pdfFilePath: string): Promise<Docume
         };
         
         const textSplitter = new RecursiveCharacterTextSplitter({
-            chunkSize: 512,
-            chunkOverlap: 100,
+            chunkSize: 1000,
+            chunkOverlap: 200,
         });
 
         const chunks = await textSplitter.splitDocuments([document]);
