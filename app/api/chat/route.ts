@@ -10,7 +10,6 @@ const ASTRA_DB_API_ENDPOINT = requireEnv("ASTRA_DB_API_ENDPOINT")
 const ASTRA_DB_APP_TOKEN = requireEnv("ASTRA_DB_APP_TOKEN")
 const OPENAI_API_KEY = requireEnv("OPENAI_API_KEY")
 
-// OpenAI SDK for embeddings
 const openai = new OpenAI({
   apiKey: OPENAI_API_KEY,
 })
@@ -46,11 +45,10 @@ export async function POST(req: Request) {
         sort: {
           $vector: embedding.data[0].embedding,
         },
-        limit: 5,
+        limit: 10,
       })
 
       const documents = await results.toArray()
-      console.log(`Found ${documents} documents`)
       const docsMap = documents?.map((doc) => doc.text)
 
       docContext = JSON.stringify(docsMap)
@@ -60,7 +58,11 @@ export async function POST(req: Request) {
     }
 
     // Create system message with context
-    const systemMessage = `You are a helpful assistant that knows can answer questions about CAPT Elections. Use the below context about the CAPT Elections laws and by-laws to answer the user's questions. If the context doesn't include the information you need to answer the question, please provide a disclaimer and do not answer based on your own existing knowledge. Format responses using markdown where applicable and don't return images.
+    const systemMessage = `
+      You are a helpful assistant that knows can answer questions about CAPT Elections. 
+      Use the below context about the CAPT Elections to answer the user's questions. 
+      If the context doesn't include the information you need to answer the question, please provide a disclaimer and do not answer based on your own existing knowledge. 
+      Format responses using markdown where applicable and don't return images.
       
       ----------------
       START CONTEXT
